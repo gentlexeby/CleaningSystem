@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>自动化清理系统监控中心</title>
+    <!-- 引入漂亮的 Google 字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <header>
+        <h1>自动化清理系统监控中心</h1>
+        <div class="user-panel">
+            <span id="currentUserInfo">当前角色：游客</span>
+            <button id="loginBtn">管理员登录</button>
+            <button id="logoutBtn" style="display:none;">注销</button>
+        </div>
+    </header>
+
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content small-modal">
+            <span class="close">&times;</span>
+            <h2>管理员登录</h2>
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="用户名 (admin)" required>
+                <input type="password" id="password" placeholder="密码 (123)" required>
+                <button type="submit">登录</button>
+            </form>
+            <p id="loginError" class="error-text"></p>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <main>
+        <!-- ================= 游客视图 (Map & List) ================= -->
+        <section id="guestSection">
+            <div class="container">
+                <!-- 左侧：地图 -->
+                <div class="map-panel">
+                    <h3>实时监控区域 (800x600)</h3>
+                    <div id="mapArea" class="map-area">
+                        <!-- 图标将通过JS动态插入这里 -->
+                    </div>
+                </div>
+                
+                <!-- 右侧：设备列表 -->
+                <div class="list-panel">
+                    <h3>设备列表</h3>
+                    <table id="deviceListTable">
+                        <thead>
+                            <tr>
+                                <th>编号</th>
+                                <th>类型</th>
+                                <th>名称</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 列表项通过JS插入 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 管理员视图 ================= -->
+        <section id="adminSection" style="display:none;">
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="switchAdminTab('manageST')">充电桩管理</button>
+                <button class="tab-btn" onclick="switchAdminTab('manageAGV')">小车管理</button>
+                <button class="tab-btn" onclick="switchAdminTab('stats')">数据统计</button>
+            </div>
+
+            <!-- Tab 1: 充电桩管理 -->
+            <div id="manageST" class="tab-content">
+                <div class="toolbar">
+                    <input type="text" id="filterST" placeholder="输入名称筛选...">
+                    <button onclick="openAddSTModal()">+ 新增充电桩</button>
+                </div>
+                <table id="tableST">
+                    <thead><tr><th>编号</th><th>名称</th><th>操作</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Tab 2: 小车管理 -->
+            <div id="manageAGV" class="tab-content" style="display:none;">
+                <div class="toolbar">
+                    <input type="text" id="filterAGV" placeholder="输入名称筛选...">
+                    <button onclick="openAddAGVModal()">+ 新增小车</button>
+                </div>
+                <table id="tableAGV">
+                    <thead><tr><th>编号</th><th>名称</th><th>速度</th><th>电池</th><th>操作</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Tab 3: 统计数据 -->
+            <div id="stats" class="tab-content" style="display:none;">
+                <div class="stats-container">
+                    <div class="chart-box">
+                        <h4>任务完成数统计 (柱状图)</h4>
+                        <div id="barChart" class="bar-chart"></div>
+                    </div>
+                    <div class="chart-box">
+                        <h4>当前电量监控</h4>
+                        <div id="batteryList" class="battery-list"></div>
+                    </div>
+                    <div class="table-box">
+                        <h4>任务详情记录</h4>
+                        <table id="taskTable">
+                            <thead><tr><th>任务号</th><th>小车</th><th>开始时间</th><th>结束时间</th><th>耗时</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 详情弹窗 (通用) -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="detailTitle">设备详情</h2>
+            <div id="detailBody"></div>
+        </div>
+    </div>
+
+    <!-- 新增设备弹窗 (通用表单) -->
+    <div id="addDeviceModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="addDeviceTitle">新增设备</h2>
+            <form id="addDeviceForm"></form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+/* ================= 1. 全局变量与重置 ================= */
+:root {
+    --primary-color: #2563eb;    /* 科技蓝 */
+    --primary-hover: #1d4ed8;
+    --secondary-color: #10b981;  /* 成功绿 */
+    --danger-color: #ef4444;     /* 故障红 */
+    --warning-color: #f59e0b;    /* 警告黄 */
+    --bg-color: #f3f4f6;         /* 浅灰背景 */
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-light: #6b7280;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+/* ================= 2. 顶部导航栏 ================= */
+header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #fff;
+    padding: 0 30px;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.user-panel span { margin-right: 15px; font-size: 0.95rem; opacity: 0.9; }
+
+/* 按钮样式 */
+button {
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+button#loginBtn, button#logoutBtn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+button#loginBtn:hover, button#logoutBtn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+}
+
+/* ================= 3. 布局容器 ================= */
+main { padding: 30px; max-width: 1400px; margin: 0 auto; }
+
+.container { 
+    display: flex; 
+    gap: 30px; 
+    align-items: flex-start; /* 防止列表被地图拉伸 */
+}
+
+/* 卡片通用样式 */
+.map-panel, .list-panel, .admin-tabs, .tab-content, .chart-box, .table-box {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    padding: 20px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+h3, h4 { margin-top: 0; color: var(--text-main); font-weight: 600; }
+
+/* ================= 4. 地图区域 ================= */
+.map-panel { flex: 0 0 auto; } /* 固定宽度 */
+
+.map-area {
+    width: 800px;
+    height: 600px;
+    background-color: #e5e7eb;
+    border-radius: 8px;
+    position: relative;
+    overflow: visible;
+    /* 更加精致的网格线 */
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* 地图图标 */
+.map-icon {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    transform: translate(-50%, 50%);
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: left 1s linear, bottom 1s linear, transform 0.2s;
+    border: 2px solid white;
+}
+
+.map-icon:hover { transform: translate(-50%, 50%) scale(1.2); z-index: 50; }
+
+/* 智能小车 (带呼吸动画) */
+.icon-agv { 
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover)); 
+    z-index: 10;
+    animation: pulse-blue 2s infinite;
+}
+
+/* 充电桩 */
+.icon-st { 
+    background: linear-gradient(135deg, var(--secondary-color), #059669); 
+    border-radius: 6px; /* 方形圆角 */
+    z-index: 5; 
+}
+
+/* 呼吸动画定义 */
+@keyframes pulse-blue {
+    0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+/* ================= 5. 表格与列表 ================= */
+.list-panel { flex: 1; max-height: 640px; overflow-y: auto; padding: 0; overflow: hidden; }
+.list-panel h3 { margin: 20px 20px 10px 20px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+thead {
+    background-color: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+td { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; color: var(--text-main); }
+tr:last-child td { border-bottom: none; }
+tr:hover { background-color: #f9fafb; transition: background 0.2s; }
+
+/* 表格里的按钮 */
+td button {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 4px 10px;
+    font-size: 0.8rem;
+}
+td button:hover { background-color: var(--primary-color); color: white; }
+
+/* ================= 6. 弹窗 (Modal) ================= */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; top: 0; 
+    width: 100%; height: 100%; 
+    background-color: rgba(0,0,0,0.5); 
+    backdrop-filter: blur(4px); /* 磨砂玻璃背景 */
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 8% auto;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    width: 50%;
+    max-width: 600px;
+    position: relative;
+    animation: slideDown 0.3s;
+}
+
+.small-modal { width: 350px; text-align: center; }
+.small-modal input {
+    width: 100%; padding: 10px; margin: 10px 0;
+    border: 1px solid #d1d5db; border-radius: 6px;
+    outline: none;
+}
+.small-modal input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.small-modal button { width: 100%; background: var(--primary-color); color: white; padding: 10px; margin-top: 10px; }
+
+.close {
+    position: absolute; right: 20px; top: 15px;
+    font-size: 28px; color: #9ca3af; transition: color 0.2s;
+}
+.close:hover { color: var(--text-main); }
+
+/* 详情页排版 */
+#detailBody p { margin: 8px 0; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
+progress { width: 100%; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+progress::-webkit-progress-bar { background-color: #e5e7eb; }
+progress::-webkit-progress-value { background-color: var(--secondary-color); transition: width 0.5s; }
+
+/* ================= 7. 管理员界面 ================= */
+.admin-tabs { 
+    padding: 0; 
+    display: flex; 
+    background: transparent; 
+    box-shadow: none; 
+    border: none; 
+    margin-bottom: 20px; 
+    gap: 10px;
+}
+
+.tab-btn {
+    background: white;
+    color: var(--text-light);
+    border: 1px solid #e5e7eb;
+    padding: 10px 24px;
+    border-radius: 30px; /* 胶囊按钮 */
+}
+
+.tab-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.toolbar { display: flex; gap: 10px; margin-bottom: 20px; }
+.toolbar input { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; flex: 1; max-width: 300px; }
+.toolbar button { background: var(--secondary-color); color: white; }
+.toolbar button:hover { background: #059669; }
+
+/* 统计图表区 */
+.stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.table-box { grid-column: 1 / -1; }
+
+.bar-chart { 
+    height: 250px; 
+    display: flex; 
+    align-items: flex-end; 
+    gap: 15px; 
+    padding-top: 40px; 
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.bar-item {
+    flex: 1;
+    background: linear-gradient(to top, var(--primary-color), #60a5fa);
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 30px;
+}
+
+.bar-value { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 12px; }
+.bar-label { position: absolute; bottom: -25px; width: 100%; text-align: center; font-size: 11px; color: var(--text-light); overflow: hidden; text-overflow: ellipsis; }
+
+/* 动画关键帧 */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+/* ================= 8. 故障状态样式 (新增) ================= */
+/* 当小车图标拥有 .status-fault 类名时，变成红色 */
+.icon-agv.status-fault {
+    background: linear-gradient(135deg, #ef4444, #b91c1c); /* 警示红 */
+    animation: pulse-red 2s infinite; /* 红色呼吸灯 */
+    z-index: 20; /* 让故障车显示在最上层 */
+}
+
+/* 红色呼吸动画 */
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
